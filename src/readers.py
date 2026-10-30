@@ -24,3 +24,19 @@ def read_excel_file():
     except Exception as e:
         print(f"Error loading Excel file: {e}")
         return None
+
+def check_files_exist():
+    folder = config['data_folder']
+    required_files = [config['csv_file'], config['excel_file']]
+    
+    for filename in required_files:
+        full_path = os.path.join(folder, filename)
+        if os.path.exists(full_path):
+            print(f"Found: {filename}")
+        else:
+            print(f"Missing file: {filename}")
+
+if __name__ == "__main__":
+    check_files_exist()
+    read_csv_file()
+    read_excel_file()
