@@ -1,0 +1,8 @@
+{
+  "data_folder": "data",
+  "csv_file": "country_records.csv",
+  "excel_file": "country_records.xlsx",
+  "json_file": "country_records.json",
+  "parquet_file": "country_records.parquet",
+  "default_year": 2007
+}
