@@ -48,8 +48,8 @@ py -m jupyter nbconvert --to html --execute --inplace report.ipynb --output repo
 
 | Member | GitHub identity | Commit email | Responsibility |
 |---|---|---|---|
-| Member 1 — Uno Timothy Rayven Kabiling | `@unorayvenkabiling-rgb` | Pending confirmation | CSV and Excel readers |
-| Member 2 — Carlos Gabriel Roman | `@gabroman28` | Pending confirmation | JSON and Parquet readers |
+| Member 1 — Uno Timothy Rayven Kabiling | `@unorayvenkabiling-rgb` | `unorayven.kabiling@ust.edu.ph` | CSV and Excel readers |
+| Member 2 — Carlos Gabriel Roman | `@gabroman28` | `carlosgabriel.roman@ust.edu.ph` | JSON and Parquet readers |
 | Member 3 — Isaiah Collado | `@IsaiahCollado` | `isaiah.collado@ust.edu.ph` | Validation, quarantine, duplicates, and conflicts |
 | Member 4 — John Christian Ballesteros | `@John-Christian-Ballesteros` | `johnchristian.ballesteros@ust.edu.ph` | Pandas analysis and NumPy matrix |
 | Member 5 — Jeremiah Daniel Padilla | `@jdpadilla2` | `jeremiahdaniel.padilla@ust.edu.ph` | CLI, pipeline integration, staging, exports, and failure tests |
