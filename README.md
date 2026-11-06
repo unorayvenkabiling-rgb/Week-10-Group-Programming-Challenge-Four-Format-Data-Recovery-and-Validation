@@ -8,11 +8,11 @@ Team & Task Ownership
 
 Member 1: | Uno Timothy Rayven Kabiling | @unorayvenkabiling-rgb | `email@example.com` | CSV & Excel loaders, delimiter/sheet parsing, header normalization 
 
-Member 2: | Carlos Gabriel Roman| @gabroman28 | `email@example.com` | JSON & Parquet loaders, nested record extraction, string normalization |
+Member 2: | Carlos Gabriel Roman | @gabroman28 | `email@example.com` | JSON & Parquet loaders, nested record extraction, string normalization |
 
 Member 3: | Isaiah Collado | @IsaiahCollado | isaiah.collado@ust.edu.ph | Row validation engine, quarantine logic, exact deduplication, conflicting key handling |
 
-Member 4: | John Christian Ballesteros | @John-Christian-Ballesteros | `email@example.com` | Pipeline integration, final dataset aggregation, peer review coordination |
+Member 4: | John Christian Ballesteros | @John-Christian-Ballesteros | johnchristian.ballesteros@ust.edu.ph | Pipeline integration, final dataset aggregation, peer review coordination |
 
 Member 5: | Jeremiah Daniel Padilla | @jdpadilla2 | `email@example.com` | Pipeline integration, final dataset aggregation, peer review coordination |
 
