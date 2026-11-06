@@ -36,6 +36,19 @@ py -m unittest discover -v
 The required recovery and failure-category outcomes are recorded in
 `test_results.txt`.
 
+Install the application and notebook dependencies with:
+
+```powershell
+py -m pip install -r requirements.txt
+```
+
+Execute the reporting notebook and create its HTML export from the repository
+root with:
+
+```powershell
+py -m jupyter nbconvert --to html --execute --inplace report.ipynb --output report.html
+```
+
 ## Member ownership and Git identities
 
 | Member | Responsibility | Git identity |

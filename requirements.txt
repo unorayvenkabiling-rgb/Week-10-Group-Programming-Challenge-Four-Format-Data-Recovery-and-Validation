@@ -1,0 +1,6 @@
+numpy>=1.26,<3
+pandas>=2.2,<4
+openpyxl>=3.1,<4
+pyarrow>=14,<30
+ipykernel>=6,<8
+nbconvert>=7,<8
