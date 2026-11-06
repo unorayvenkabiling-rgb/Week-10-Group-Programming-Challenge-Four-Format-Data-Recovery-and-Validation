@@ -3,43 +3,55 @@ import json
 
 def load_parquet_records(filepath: str, manifest: dict) -> pd.DataFrame:
     """
-    Reads the Parquet file and maps its string columns to the canonical names defined in the manifest.
+    Reads the Parquet file and maps its string columns to the canonical names.
+    Validates numeric values before casting.
     """
-    # Extract the parquet column mapping from the manifest dictionary
-    column_mapping = manifest["format_settings"]["parquet"]["column_mapping"]
+    # Extract mapping from the files dictionary as requested by Isaiah
+    column_mapping = manifest.get("files", {}).get("country_records.parquet", {}).get("source_to_canonical", {})
     
-    # Load the parquet file
     df = pd.read_parquet(filepath)
-    
-    # Rename columns to canonical format
     df = df.rename(columns=column_mapping)
     
-    # Ensure the canonical column order
-    canonical_order = manifest["schema"]["canonical_columns"]
-    df = df[canonical_order]
+    # Strip whitespaces from object/string columns and attempt numeric casting
+    for col in df.columns:
+        if df[col].dtype == object:
+            df[col] = df[col].astype(str).str.strip()
+            
+    for num_col in ['year', 'pop', 'lifeExp', 'gdpPercap']:
+        if num_col in df.columns:
+            df[num_col] = pd.to_numeric(df[num_col], errors='ignore')
+            
+    canonical_order = manifest.get("canonical_order", [])
     
-    return df
+    # Validate canonical schema exists to prevent KeyError on indexing
+    missing = [col for col in canonical_order if col not in df.columns]
+    if missing:
+        raise KeyError(f"Missing required canonical columns: {missing}")
+        
+    return df[canonical_order]
 
 def load_json_records(filepath: str, manifest: dict) -> pd.DataFrame:
     """
-    Reads the JSON file, extracts the nested records from the metadata object, 
-    and maps columns to canonical names.
+    Reads the JSON file, extracts nested records, and maps columns to canonical names.
     """
-    column_mapping = manifest["format_settings"]["json"]["column_mapping"]
+    column_mapping = manifest.get("files", {}).get("country_records.json", {}).get("source_to_canonical", {})
     
-    # Load the raw JSON
-    with open(filepath, 'r') as file:
-        raw_data = json.load(file)
+    # Try-except block for resource cleanup and JSONDecodeError handling
+    try:
+        with open(filepath, 'r') as file:
+            raw_data = json.load(file)
+    except json.JSONDecodeError:
+        raise ValueError(f"File {filepath} contains unparseable JSON data.")
         
-    # Extract the nested records (the dataset contains a 'records' key for the actual data)
     records = raw_data.get("records", [])
-    
-    # Flatten into a DataFrame
     df = pd.json_normalize(records)
     
-    # Rename and reorder columns
     df = df.rename(columns=column_mapping)
-    canonical_order = manifest["schema"]["canonical_columns"]
-    df = df[canonical_order]
+    canonical_order = manifest.get("canonical_order", [])
     
-    return df
+    # Validate canonical schema exists
+    missing = [col for col in canonical_order if col not in df.columns]
+    if missing:
+        raise KeyError(f"Missing required canonical columns: {missing}")
+        
+    return df[canonical_order]
