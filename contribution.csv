@@ -1,11 +1,11 @@
 member_id,member_name,github_username,role,assigned_files,commits_submitted,peer_reviewed_by,pr_status
 
-1,[Uno Timothy Rayven Kabiling], [uno],Member 1 - Tabular Ingestion Specialist,"src/csv_excel_loaders.py, tests/test_member1.py",3,Member 2,Merged
+1,Uno Timothy Rayven Kabiling,unorayvenkabiling-rgb,Member 1 - Tabular Ingestion Specialist,"src/csv_excel_loaders.py, tests/test_member1.py",3,Member 2,Merged
 
-2,[Carlos Gabriel Romab], [gabroman28],Member 2 - Semi-Structured Ingestion Specialist,"src/json_parquet_loaders.py, tests/test_member2.py",2,Member 3,Changes Requested
+2,Carlos Gabriel Roman,gabroman28,Member 2 - Semi-Structured Ingestion Specialist,"src/json_parquet_loaders.py, tests/test_member2.py",2,Member 3,Changes Requested
 
 3,Isaiah Collado,IsaiahCollado,Member 3 - Validation & Quarantine Specialist,"src/validation.py, tests/test_validation.py, reviews.md",3,Member 4,Pending Review
 
-4,[Member 4 Name],[member4_github],Member 4 - Pipeline Integrator & Aggregator,"src/main_pipeline.py, output/canonical_dataset.csv, output/quarantine_records.csv",2,Member 5,Pending Review
+4,John Christian Ballesteros,John-Christian-Ballesteros,Member 4 - Pipeline Integrator & Aggregator,"src/main_pipeline.py, output/canonical_dataset.csv, output/quarantine_records.csv",2,Member 5,Pending Review
 
-5,[Member 5 Name],[member5_github],Member 5 - QA & Repository Lead,"tests/test_pipeline.py, README.md, contributions.csv, requirements.txt",2,Member 1,Pending Review
+5,Jeremiah Daniel Padilla,jdpadilla2,Member 5 - QA & Repository Lead,"tests/test_pipeline.py, README.md, contributions.csv, requirements.txt",2,Member 1,Pending Review
