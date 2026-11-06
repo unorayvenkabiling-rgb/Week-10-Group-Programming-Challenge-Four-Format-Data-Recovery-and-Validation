@@ -47,6 +47,22 @@ Recommendation: Include a dummy `"files"` array inside `bad_manifest`.
 3. Conclusion & Next Steps
 Once the list lookups for `manifest["files"]` and mock manifest structures are updated, the loader functions will safely parse JSON/Parquet datasets into canonical format for downstream row validation and quarantine processing.
 
+Peer Review 3: Member 3 Codebase
+Reviewer: John Christian Ballesteros (Member 4)
+Target Author: Isaiah Collado (Member 3)
+Target Branch / PR: `member-3`
+Files Reviewed: `validation.py`, `test_validation.py`
+Review Status: Approved
+
+1. Code Overview
+Member 3 provides a robust source code supported by comprehensive unit tests.
+
+2. Test Coverage
+Handles errors and edge cases gracefully.
+
+3. Conclusion & Next Steps
+Member 3's code is clean. Its pull request is approved.
+
 # Member review record
 
 ## Member 5 review of Member 4 analysis work
