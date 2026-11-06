@@ -5,6 +5,6 @@
   "excel_file": "country_records.xlsx",
   "json_file": "country_records.json",
   "parquet_file": "country_records.parquet",
-  "default_year": 2007,
+  "reporting_year": 2007,
   "output_folder": "outputs"
 }

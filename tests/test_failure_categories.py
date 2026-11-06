@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pandas as pd
 
-import main as pipeline
+from src import pipeline
 from src.readers import load_csv_records
 from src.validation import validate_and_quarantine
 
@@ -38,7 +38,7 @@ class TestRequiredFailureCategories(unittest.TestCase):
             "excel_file": "country_records.xlsx",
             "json_file": "country_records.json",
             "parquet_file": "country_records.parquet",
-            "default_year": 2007,
+            "reporting_year": 2007,
             "output_folder": str(self.output_dir),
         }
         self.write_manifest(self.manifest)
@@ -62,6 +62,10 @@ class TestRequiredFailureCategories(unittest.TestCase):
         )
         self.assertEqual(len(report_files), 1)
         report = pd.read_csv(report_files[0])
+        self.assertEqual(
+            list(report.columns),
+            ["check", "expected", "actual", "tolerance", "pass"],
+        )
         self.assertFalse(report.loc[report["check"] == "processing", "pass"].iloc[0])
         return report
 

@@ -80,7 +80,12 @@ def _read_export(path: Path, format_name: str) -> pd.DataFrame:
 def _normalize_frame(
     frame: pd.DataFrame, manifest: dict[str, Any]
 ) -> pd.DataFrame:
-    """Apply manifest column order and strict canonical types."""
+    """Apply manifest column order and strict canonical types.
+
+    CSV is read as strings, so its declared numeric fields require explicit
+    conversion. Excel and JSON infer numeric values on load; Parquet preserves
+    stored types. All formats are normalized here for a consistent comparison.
+    """
     columns = manifest["canonical_order"]
     missing = [column for column in columns if column not in frame.columns]
     if missing:

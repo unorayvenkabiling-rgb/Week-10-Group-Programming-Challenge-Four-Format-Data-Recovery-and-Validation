@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pandas as pd
 
 
@@ -20,7 +22,9 @@ def _file_config(manifest: dict, filename: str) -> dict:
     return config
 
 
-def _normalize_columns(df: pd.DataFrame, manifest: dict, filename: str, format_name: str) -> pd.DataFrame:
+def _normalize_columns(
+    df: pd.DataFrame, manifest: dict, filename: str, format_name: str
+) -> pd.DataFrame:
     """Map and return the required canonical columns for an input file."""
     file_config = _file_config(manifest, filename)
     column_mapping = file_config.get("source_to_canonical", {})
@@ -41,14 +45,15 @@ def _normalize_columns(df: pd.DataFrame, manifest: dict, filename: str, format_n
 
 def load_csv_records(filepath: str, manifest: dict) -> pd.DataFrame:
     """Read, map, and normalize the configured CSV records."""
-    file_config = _file_config(manifest, "country_records.csv")
+    filename = Path(filepath).name
+    file_config = _file_config(manifest, filename)
     df = pd.read_csv(
         filepath,
         sep=file_config.get("separator", ";"),
         encoding=file_config.get("encoding", "cp1252"),
-        skiprows=2,
+        skiprows=file_config.get("skiprows", 2),
     )
-    return _normalize_columns(df, manifest, "country_records.csv", "CSV")
+    return _normalize_columns(df, manifest, filename, "CSV")
 
 def load_excel_records(filepath: str, manifest: dict) -> pd.DataFrame:
     """Read, map, and normalize the configured Excel observation sheet."""

@@ -4,12 +4,10 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
-from unittest.mock import patch
 
 import pandas as pd
 
-import main as pipeline
-from src.readers import load_csv_records
+from src import pipeline
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -28,7 +26,7 @@ class TestPipelineCLI(unittest.TestCase):
             "excel_file": "country_records.xlsx",
             "json_file": "country_records.json",
             "parquet_file": "country_records.parquet",
-            "default_year": 2007,
+            "reporting_year": 2007,
             "output_folder": str(self.output_dir),
         }
         self.write_config()
@@ -76,7 +74,14 @@ class TestPipelineCLI(unittest.TestCase):
             expected_files,
         )
         validation = pd.read_csv(self.output_dir / "validation.csv")
+        self.assertEqual(
+            list(validation.columns),
+            ["check", "expected", "actual", "tolerance", "pass"],
+        )
         self.assertTrue(validation["pass"].all())
+        self.assertTrue(
+            validation["check"].str.startswith("country_records.csv:").any()
+        )
         self.assertEqual(len(pd.read_csv(self.output_dir / "quarantine.csv")), 24)
         self.assertEqual(len(pd.read_csv(self.output_dir / "duplicate_log.csv")), 8)
         quarantine = pd.read_csv(self.output_dir / "quarantine.csv")
@@ -103,7 +108,7 @@ class TestPipelineCLI(unittest.TestCase):
 
     def test_configured_1997_analysis_does_not_edit_processing_code(self) -> None:
         """Changing only the reporting year regenerates the selected-year output."""
-        self.config["default_year"] = 1997
+        self.config["reporting_year"] = 1997
         self.write_config()
         result = pipeline.run_pipeline(self.config_path)
         self.assertEqual(result, 0)
@@ -112,31 +117,45 @@ class TestPipelineCLI(unittest.TestCase):
         self.assertEqual(len(asia), 33)
 
     def test_conflicting_input_fails_without_replacing_prior_outputs(self) -> None:
-        """Keep old published files and retain a failed report on a key conflict."""
+        """The supplied conflicting-key fixture fails without replacing outputs."""
         self.output_dir.mkdir()
         sentinel = self.output_dir / "previous_success.txt"
         sentinel.write_text("keep prior successful outputs\n", encoding="utf-8")
 
-        valid_df = load_csv_records(
-            PROJECT_ROOT / "data" / "country_records.csv",
-            json.loads(
-                (PROJECT_ROOT / "data" / "manifest.json").read_text(
-                    encoding="utf-8"
-                )
-            ),
+        manifest = json.loads(
+            (PROJECT_ROOT / "data" / "manifest.json").read_text(encoding="utf-8")
         )
-        first = valid_df.iloc[[0]].copy()
-        conflict = first.copy()
-        conflict.loc[conflict.index[0], "pop"] += 1
-        conflicting_df = pd.concat([first, conflict], ignore_index=True)
+        csv_config = next(
+            item for item in manifest["files"] if item["format"] == "csv"
+        )
+        csv_config["file"] = "conflicting_key.csv"
+        csv_config["separator"] = ","
+        csv_config["encoding"] = "utf-8"
+        csv_config["skiprows"] = 0
+        csv_config["source_to_canonical"] = {
+            column: column for column in manifest["canonical_order"]
+        }
+        manifest_path = self.root / "failure-manifest.json"
+        manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+        self.config["manifest_file"] = str(manifest_path)
+        self.config["csv_file"] = "conflicting_key.csv"
+        self.write_config()
 
-        with patch.dict(
-            pipeline.READERS,
-            {"csv": lambda _path, _manifest: conflicting_df},
-        ):
-            result = pipeline.run_pipeline(self.config_path)
+        completed = subprocess.run(
+            [
+                sys.executable,
+                str(PROJECT_ROOT / "main.py"),
+                "--config",
+                str(self.config_path),
+            ],
+            cwd=self.root,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
 
-        self.assertEqual(result, 1)
+        self.assertEqual(completed.returncode, 1, completed.stdout)
+        self.assertIn("Conflicting keys detected", completed.stderr)
         self.assertEqual(
             sentinel.read_text(encoding="utf-8"),
             "keep prior successful outputs\n",
@@ -146,6 +165,10 @@ class TestPipelineCLI(unittest.TestCase):
         failed_reports = list(staging_root.glob("run-*/validation_failed.csv"))
         self.assertEqual(len(failed_reports), 1)
         failure_report = pd.read_csv(failed_reports[0])
+        self.assertEqual(
+            list(failure_report.columns),
+            ["check", "expected", "actual", "tolerance", "pass"],
+        )
         processing_failure = failure_report.loc[
             failure_report["check"] == "processing", "actual"
         ].iloc[0]
