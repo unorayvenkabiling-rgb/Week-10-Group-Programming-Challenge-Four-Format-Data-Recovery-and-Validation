@@ -23,4 +23,4 @@ country_records.parquet: 7f72d4ddb71d7cc34c50782220aca4b3bd68d9f0fe87fb0022b677a
 
 Fresh-clone verification:
 PENDING - a group member other than the main integrator must clone the final
-release and record the verification result.
+release and record the verification result..
