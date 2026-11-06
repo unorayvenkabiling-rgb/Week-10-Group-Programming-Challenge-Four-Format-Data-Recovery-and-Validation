@@ -1,41 +1,58 @@
 # Week-10-Group-Programming-Challenge-Four-Format-Data-Recovery-and-Validation
 
-Data Ingestion & Validation Pipeline
+Four-format data recovery and validation pipeline for CSV, Excel, JSON, and
+Parquet inputs. The supplied files in `data/` are read as-is and are not
+modified by the pipeline.
 
-A robust data ingestion pipeline built to process, normalize, validate, and quarantine multi-format dataset inputs (CSV, Excel, JSON, Parquet) against a unified canonical schema.
+## Setup and run
 
-Team & Task Ownership
+Install the Python dependencies:
 
-Member 1: | Uno Timothy Rayven Kabiling | @unorayvenkabiling-rgb | `email@example.com` | CSV & Excel loaders, delimiter/sheet parsing, header normalization 
+```shell
+py -m pip install -r requirements.txt
+```
 
-Member 2: | Carlos Gabriel Roman | @gabroman28 | `email@example.com` | JSON & Parquet loaders, nested record extraction, string normalization |
+Run the pipeline from the repository root:
 
-Member 3: | Isaiah Collado | @IsaiahCollado | isaiah.collado@ust.edu.ph | Row validation engine, quarantine logic, exact deduplication, conflicting key handling |
+```shell
+py main.py --config config.json
+```
 
-Member 4: | John Christian Ballesteros | @John-Christian-Ballesteros | johnchristian.ballesteros@ust.edu.ph | Pipeline integration, final dataset aggregation, peer review coordination |
+The configuration selects the input files, manifest, reporting year, and
+output directory. Paths are resolved relative to the configuration file unless
+they are absolute. By default, generated files are written to `outputs/`, which
+is excluded from Git.
 
-Member 5: | Jeremiah Daniel Padilla | @jdpadilla2 | `email@example.com` | Pipeline integration, final dataset aggregation, peer review coordination |
+The pipeline loads and validates the input formats, reconciles the recovered
+records, runs the analyses and export round-trip checks, then publishes outputs
+only after all checks pass. Outputs include canonical CSV, Excel, JSON, and
+Parquet data; analysis tables; quarantine and duplicate logs; and validation
+and audit reports.
 
+If processing fails, the command exits nonzero and leaves previously published
+outputs unchanged. Failure reports are retained under `.outputs.staging/`.
 
-Module Architecture & Workflow
+Run the automated tests with:
 
-1. **Loaders (`src/`)**: Format-specific modules parse raw data files (`.csv`, `.xlsx`, `.json`, `.parquet`) using `data/manifest.json` schema rules and map raw columns to canonical order.
-2. **Validation & Quarantine (`src/validation.py`)**: 
-   * Validates field types, non-null constraints, and value ranges for each record.
-   * Isolates invalid records into a dedicated quarantine output file without stopping pipeline execution.
-   * Performs exact deduplication and flags conflicting primary keys.
-3. **Integration**: Aggregates all validated records across formats into a clean target dataset.
+```shell
+py -m unittest discover -v
+```
 
----
+To execute the reporting notebook and regenerate its HTML export:
 
-## 🚀 Getting Started & Execution
+```shell
+py -m jupyter nbconvert --to html --execute --inplace report.ipynb --output report.html
+```
 
-### Prerequisites
-* Python 3.9+
-* `pandas`, `pyarrow` (for Parquet handling)
+## Member roles and Git identities
 
-### Installation
-```bash
-git clone <repository-url>
-cd <repository-folder>
-pip install -r requirements.txt
+| Member | GitHub identity | Commit email | Responsibility |
+|---|---|---|---|
+| Member 1 — Uno Timothy Rayven Kabiling | `@unorayvenkabiling-rgb` | Pending confirmation | CSV and Excel readers |
+| Member 2 — Carlos Gabriel Roman | `@gabroman28` | Pending confirmation | JSON and Parquet readers |
+| Member 3 — Isaiah Collado | `@IsaiahCollado` | `isaiah.collado@ust.edu.ph` | Validation, quarantine, duplicates, and conflicts |
+| Member 4 — John Christian Ballesteros | `@John-Christian-Ballesteros` | `johnchristian.ballesteros@ust.edu.ph` | Pandas analysis and NumPy matrix |
+| Member 5 — Jeremiah Daniel Padilla | `@jdpadilla2` | `jeremiahdaniel.padilla@ust.edu.ph` | CLI, pipeline integration, staging, exports, and failure tests |
+
+The two unconfirmed commit emails should be completed by those members before
+final submission.

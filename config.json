@@ -1,0 +1,10 @@
+{
+  "data_folder": "data",
+  "manifest_file": "manifest.json",
+  "csv_file": "country_records.csv",
+  "excel_file": "country_records.xlsx",
+  "json_file": "country_records.json",
+  "parquet_file": "country_records.parquet",
+  "reporting_year": 2007,
+  "output_folder": "outputs"
+}
