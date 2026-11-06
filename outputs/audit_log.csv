@@ -1,0 +1,24 @@
+step,source_file,operation,rule,rows_before,rows_after
+recovery,country_records.csv,parse and map records,manifest file layout and canonical column mapping,1712,1712
+validation,country_records.csv,quarantine invalid records,manifest field validation rules,1712,1706
+deduplication,country_records.csv,remove exact duplicates,retain first exact row; conflicting keys stop processing,1706,1704
+recovery,country_records.xlsx,parse and map records,manifest file layout and canonical column mapping,1712,1712
+validation,country_records.xlsx,quarantine invalid records,manifest field validation rules,1712,1706
+deduplication,country_records.xlsx,remove exact duplicates,retain first exact row; conflicting keys stop processing,1706,1704
+recovery,country_records.json,parse and map records,manifest file layout and canonical column mapping,1712,1712
+validation,country_records.json,quarantine invalid records,manifest field validation rules,1712,1706
+deduplication,country_records.json,remove exact duplicates,retain first exact row; conflicting keys stop processing,1706,1704
+recovery,country_records.parquet,parse and map records,manifest file layout and canonical column mapping,1712,1712
+validation,country_records.parquet,quarantine invalid records,manifest field validation rules,1712,1706
+deduplication,country_records.parquet,remove exact duplicates,retain first exact row; conflicting keys stop processing,1706,1704
+agreement,country_records.csv,compare canonical records by key,"exact keys/text/integers; float atol=1e-8, rtol=0",1704,1704
+agreement,country_records.xlsx,compare canonical records by key,"exact keys/text/integers; float atol=1e-8, rtol=0",1704,1704
+agreement,country_records.json,compare canonical records by key,"exact keys/text/integers; float atol=1e-8, rtol=0",1704,1704
+agreement,country_records.parquet,compare canonical records by key,"exact keys/text/integers; float atol=1e-8, rtol=0",1704,1704
+analysis,,select and rank Asia; calculate population in millions,"reporting year 2007; descending life expectancy, min rank",1704,33
+analysis,,select Philippines and calculate history changes,all observations sorted by year; change from first observation,1704,12
+analysis,,build and broadcast NumPy population index,"countries Philippines, Indonesia, Thailand; baseline 1982=100",18,18
+export_verification,canonical.csv,"export, reload, and compare","keys/text/integers exact; missingness exact; float atol=1e-8, rtol=0",1704,1704
+export_verification,canonical.xlsx,"export, reload, and compare","keys/text/integers exact; missingness exact; float atol=1e-8, rtol=0",1704,1704
+export_verification,canonical.json,"export, reload, and compare","keys/text/integers exact; missingness exact; float atol=1e-8, rtol=0",1704,1704
+export_verification,canonical.parquet,"export, reload, and compare","keys/text/integers exact; missingness exact; float atol=1e-8, rtol=0",1704,1704

@@ -1,0 +1,89 @@
+source_file,check,expected,actual,tolerance,pass
+country_records.csv,input_row_reconciliation,1712 = 6 rejected + 2 duplicates + 1704 canonical,1712 = 6 + 2 + 1704,0.0,True
+country_records.csv,canonical_key_uniqueness,unique country/year keys,0,0.0,True
+country_records.csv,canonical_domain_values,allowed continents and years,valid,0.0,True
+country_records.xlsx,input_row_reconciliation,1712 = 6 rejected + 2 duplicates + 1704 canonical,1712 = 6 + 2 + 1704,0.0,True
+country_records.xlsx,canonical_key_uniqueness,unique country/year keys,0,0.0,True
+country_records.xlsx,canonical_domain_values,allowed continents and years,valid,0.0,True
+country_records.json,input_row_reconciliation,1712 = 6 rejected + 2 duplicates + 1704 canonical,1712 = 6 + 2 + 1704,0.0,True
+country_records.json,canonical_key_uniqueness,unique country/year keys,0,0.0,True
+country_records.json,canonical_domain_values,allowed continents and years,valid,0.0,True
+country_records.parquet,input_row_reconciliation,1712 = 6 rejected + 2 duplicates + 1704 canonical,1712 = 6 + 2 + 1704,0.0,True
+country_records.parquet,canonical_key_uniqueness,unique country/year keys,0,0.0,True
+country_records.parquet,canonical_domain_values,allowed continents and years,valid,0.0,True
+country_records.csv,row_count,1704,1704,0.0,True
+country_records.csv,columns,"['country', 'continent', 'year', 'lifeExp', 'pop', 'gdpPercap']","['country', 'continent', 'year', 'lifeExp', 'pop', 'gdpPercap']",0.0,True
+country_records.csv,unique_keys,True,True,0.0,True
+country_records.csv,key_set,1704,1704,0.0,True
+country_records.csv,values:continent,exact,match,0.0,True
+country_records.csv,values:lifeExp,absolute tolerance,match,1e-08,True
+country_records.csv,values:pop,exact,match,0.0,True
+country_records.csv,values:gdpPercap,absolute tolerance,match,1e-08,True
+country_records.xlsx,row_count,1704,1704,0.0,True
+country_records.xlsx,columns,"['country', 'continent', 'year', 'lifeExp', 'pop', 'gdpPercap']","['country', 'continent', 'year', 'lifeExp', 'pop', 'gdpPercap']",0.0,True
+country_records.xlsx,unique_keys,True,True,0.0,True
+country_records.xlsx,key_set,1704,1704,0.0,True
+country_records.xlsx,values:continent,exact,match,0.0,True
+country_records.xlsx,values:lifeExp,absolute tolerance,match,1e-08,True
+country_records.xlsx,values:pop,exact,match,0.0,True
+country_records.xlsx,values:gdpPercap,absolute tolerance,match,1e-08,True
+country_records.json,row_count,1704,1704,0.0,True
+country_records.json,columns,"['country', 'continent', 'year', 'lifeExp', 'pop', 'gdpPercap']","['country', 'continent', 'year', 'lifeExp', 'pop', 'gdpPercap']",0.0,True
+country_records.json,unique_keys,True,True,0.0,True
+country_records.json,key_set,1704,1704,0.0,True
+country_records.json,values:continent,exact,match,0.0,True
+country_records.json,values:lifeExp,absolute tolerance,match,1e-08,True
+country_records.json,values:pop,exact,match,0.0,True
+country_records.json,values:gdpPercap,absolute tolerance,match,1e-08,True
+country_records.parquet,row_count,1704,1704,0.0,True
+country_records.parquet,columns,"['country', 'continent', 'year', 'lifeExp', 'pop', 'gdpPercap']","['country', 'continent', 'year', 'lifeExp', 'pop', 'gdpPercap']",0.0,True
+country_records.parquet,unique_keys,True,True,0.0,True
+country_records.parquet,key_set,1704,1704,0.0,True
+country_records.parquet,values:continent,exact,match,0.0,True
+country_records.parquet,values:lifeExp,absolute tolerance,match,1e-08,True
+country_records.parquet,values:pop,exact,match,0.0,True
+country_records.parquet,values:gdpPercap,absolute tolerance,match,1e-08,True
+,asia_selected_row_count,33,33,0.0,True
+,philippines_observation_count,12,12,0.0,True
+,numpy_shape_before,"(3, 6)","(3, 6)",0.0,True
+,numpy_shape_after,"(3, 6)","(3, 6)",0.0,True
+,numpy_broadcast_loop_agreement,True,True,1e-08,True
+,numpy_1982_baseline,all rows equal 100,"[100.0, 100.0, 100.0]",1e-08,True
+,numpy_boolean_selection_and_mean,"['Philippines', 'Indonesia']; mean=157312143.5","['Philippines', 'Indonesia']; mean=157312143.5",0.0,True
+,selected_year_asian_population_total,3811953827,3811953827,0.0,True
+,asia_2007_population_control,3811953827,3811953827,0.0,True
+,philippines_2007_population_control,91077287,91077287,0.0,True
+,total_quarantine_count,24,24,0.0,True
+,total_duplicate_count,8,8,0.0,True
+canonical.csv,row_count,1704,1704,0.0,True
+canonical.csv,columns,"['country', 'continent', 'year', 'lifeExp', 'pop', 'gdpPercap']","['country', 'continent', 'year', 'lifeExp', 'pop', 'gdpPercap']",0.0,True
+canonical.csv,unique_keys,True,True,0.0,True
+canonical.csv,key_set,1704,1704,0.0,True
+canonical.csv,values:continent,exact,match,0.0,True
+canonical.csv,values:lifeExp,absolute tolerance,match,1e-08,True
+canonical.csv,values:pop,exact,match,0.0,True
+canonical.csv,values:gdpPercap,absolute tolerance,match,1e-08,True
+canonical.xlsx,row_count,1704,1704,0.0,True
+canonical.xlsx,columns,"['country', 'continent', 'year', 'lifeExp', 'pop', 'gdpPercap']","['country', 'continent', 'year', 'lifeExp', 'pop', 'gdpPercap']",0.0,True
+canonical.xlsx,unique_keys,True,True,0.0,True
+canonical.xlsx,key_set,1704,1704,0.0,True
+canonical.xlsx,values:continent,exact,match,0.0,True
+canonical.xlsx,values:lifeExp,absolute tolerance,match,1e-08,True
+canonical.xlsx,values:pop,exact,match,0.0,True
+canonical.xlsx,values:gdpPercap,absolute tolerance,match,1e-08,True
+canonical.json,row_count,1704,1704,0.0,True
+canonical.json,columns,"['country', 'continent', 'year', 'lifeExp', 'pop', 'gdpPercap']","['country', 'continent', 'year', 'lifeExp', 'pop', 'gdpPercap']",0.0,True
+canonical.json,unique_keys,True,True,0.0,True
+canonical.json,key_set,1704,1704,0.0,True
+canonical.json,values:continent,exact,match,0.0,True
+canonical.json,values:lifeExp,absolute tolerance,match,1e-08,True
+canonical.json,values:pop,exact,match,0.0,True
+canonical.json,values:gdpPercap,absolute tolerance,match,1e-08,True
+canonical.parquet,row_count,1704,1704,0.0,True
+canonical.parquet,columns,"['country', 'continent', 'year', 'lifeExp', 'pop', 'gdpPercap']","['country', 'continent', 'year', 'lifeExp', 'pop', 'gdpPercap']",0.0,True
+canonical.parquet,unique_keys,True,True,0.0,True
+canonical.parquet,key_set,1704,1704,0.0,True
+canonical.parquet,values:continent,exact,match,0.0,True
+canonical.parquet,values:lifeExp,absolute tolerance,match,1e-08,True
+canonical.parquet,values:pop,exact,match,0.0,True
+canonical.parquet,values:gdpPercap,absolute tolerance,match,1e-08,True

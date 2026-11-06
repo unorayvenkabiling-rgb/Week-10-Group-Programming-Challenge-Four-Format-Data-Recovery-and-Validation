@@ -1,0 +1,25 @@
+source_file,source_record,reason,country,continent,year,lifeExp,pop,gdpPercap
+country_records.csv,77,"pop must be finite, integral and greater than 0",Albania,Europe,2007,76.423,100.5,5937.029526
+country_records.csv,232,"year must be finite, integral and in allowed_years",Albania,Europe,not-a-year,72.95,3428038.0,3193.054604
+country_records.csv,377,lifeExp must be finite and greater than 0 and at most 120,Algeria,Africa,1952,150.0,9279525.0,2449.008185
+country_records.csv,647,"pop must be finite, integral and greater than 0",Albania,Europe,2002,75.651,-1.0,4604.211737
+country_records.csv,973,gdpPercap must be finite and greater than 0,Algeria,Africa,1957,45.685,10270856.0,not-a-number
+country_records.csv,1176,country must be nonempty after trimming,,Europe,1992,71.581,3326498.0,2497.437901
+country_records.xlsx,394,"year must be finite, integral and in allowed_years",Albania,Europe,not-a-year,72.95,3428038.0,3193.054604
+country_records.xlsx,451,gdpPercap must be finite and greater than 0,Algeria,Africa,1957,45.685,10270856.0,not-a-number
+country_records.xlsx,1009,country must be nonempty after trimming,,Europe,1992,71.581,3326498.0,2497.437901
+country_records.xlsx,1254,"pop must be finite, integral and greater than 0",Albania,Europe,2007,76.423,100.5,5937.029526
+country_records.xlsx,1480,"pop must be finite, integral and greater than 0",Albania,Europe,2002,75.651,-1.0,4604.211737
+country_records.xlsx,1493,lifeExp must be finite and greater than 0 and at most 120,Algeria,Africa,1952,150.0,9279525.0,2449.008185
+country_records.json,330,"year must be finite, integral and in allowed_years",Albania,Europe,not-a-year,72.95,3428038,3193.054604
+country_records.json,489,"pop must be finite, integral and greater than 0",Albania,Europe,2002,75.651,-1,4604.211737
+country_records.json,508,lifeExp must be finite and greater than 0 and at most 120,Algeria,Africa,1952,150,9279525,2449.008185
+country_records.json,707,"pop must be finite, integral and greater than 0",Albania,Europe,2007,76.423,100.5,5937.029526
+country_records.json,984,country must be nonempty after trimming,,Europe,1992,71.581,3326498,2497.437901
+country_records.json,1424,gdpPercap must be finite and greater than 0,Algeria,Africa,1957,45.685,10270856,not-a-number
+country_records.parquet,173,"pop must be finite, integral and greater than 0",Albania,Europe,2007,76.423,100.5,5937.029526
+country_records.parquet,565,gdpPercap must be finite and greater than 0,Algeria,Africa,1957,45.685,10270856,not-a-number
+country_records.parquet,735,"pop must be finite, integral and greater than 0",Albania,Europe,2002,75.651,-1,4604.211737
+country_records.parquet,1137,country must be nonempty after trimming,,Europe,1992,71.581,3326498,2497.437901
+country_records.parquet,1255,lifeExp must be finite and greater than 0 and at most 120,Algeria,Africa,1952,150,9279525,2449.008185
+country_records.parquet,1559,"year must be finite, integral and in allowed_years",Albania,Europe,not-a-year,72.95,3428038,3193.054604
