@@ -2,6 +2,7 @@ import unittest
 import json
 import pandas as pd
 from src.json_parquet_loaders import load_parquet_records, load_json_records
+from src.readers import load_csv_records, load_excel_records
 
 class TestMember2Loaders(unittest.TestCase):
     
@@ -20,6 +21,18 @@ class TestMember2Loaders(unittest.TestCase):
     def test_parquet_normalization_and_count(self):
         """Test Parquet loader returns exactly 1,712 rows and maps columns correctly."""
         df = load_parquet_records("data/country_records.parquet", self.manifest)
+        self.assertEqual(len(df), 1712)
+        self.assertEqual(list(df.columns), self.canonical_columns)
+
+    def test_csv_normalization_and_count(self):
+        """Test the CSV reader maps the manifest-defined columns."""
+        df = load_csv_records("data/country_records.csv", self.manifest)
+        self.assertEqual(len(df), 1712)
+        self.assertEqual(list(df.columns), self.canonical_columns)
+
+    def test_excel_normalization_and_count(self):
+        """Test the Excel reader uses the manifest's observations sheet."""
+        df = load_excel_records("data/country_records.xlsx", self.manifest)
         self.assertEqual(len(df), 1712)
         self.assertEqual(list(df.columns), self.canonical_columns)
 

@@ -1,57 +1,35 @@
 import pandas as pd
 import json
 
+from .readers import _file_config, _normalize_columns
+
+
 def load_parquet_records(filepath: str, manifest: dict) -> pd.DataFrame:
     """
-    Reads the Parquet file and maps its string columns to the canonical names.
-    Validates numeric values before casting.
+    Read and map Parquet records while preserving values for validation.
     """
-    # Extract mapping from the files dictionary as requested by Isaiah
-    column_mapping = manifest.get("files", {}).get("country_records.parquet", {}).get("source_to_canonical", {})
-    
+    _file_config(manifest, "country_records.parquet")
     df = pd.read_parquet(filepath)
-    df = df.rename(columns=column_mapping)
-    
-    # Strip whitespaces from object/string columns and attempt numeric casting
-    for col in df.columns:
-        if df[col].dtype == object:
-            df[col] = df[col].astype(str).str.strip()
-            
-    for num_col in ['year', 'pop', 'lifeExp', 'gdpPercap']:
-        if num_col in df.columns:
-            df[num_col] = pd.to_numeric(df[num_col], errors='ignore')
-            
-    canonical_order = manifest.get("canonical_order", [])
-    
-    # Validate canonical schema exists to prevent KeyError on indexing
-    missing = [col for col in canonical_order if col not in df.columns]
-    if missing:
-        raise KeyError(f"Missing required canonical columns: {missing}")
-        
-    return df[canonical_order]
+    return _normalize_columns(
+        df, manifest, "country_records.parquet", "Parquet"
+    )
 
 def load_json_records(filepath: str, manifest: dict) -> pd.DataFrame:
     """
-    Reads the JSON file, extracts nested records, and maps columns to canonical names.
+    Read nested JSON records, map them, and preserve values for validation.
     """
-    column_mapping = manifest.get("files", {}).get("country_records.json", {}).get("source_to_canonical", {})
-    
-    # Try-except block for resource cleanup and JSONDecodeError handling
+    file_config = _file_config(manifest, "country_records.json")
     try:
-        with open(filepath, 'r') as file:
+        with open(filepath, "r", encoding=file_config.get("encoding", "utf-8")) as file:
             raw_data = json.load(file)
     except json.JSONDecodeError:
         raise ValueError(f"File {filepath} contains unparseable JSON data.")
-        
-    records = raw_data.get("records", [])
+
+    record_path = file_config.get("record_path", "records")
+    if not isinstance(raw_data, dict):
+        raise ValueError(f"File {filepath} must contain a JSON object.")
+    records = raw_data.get(record_path, [])
+    if not isinstance(records, list):
+        raise ValueError(f"JSON field {record_path!r} in {filepath} must be a list.")
     df = pd.json_normalize(records)
-    
-    df = df.rename(columns=column_mapping)
-    canonical_order = manifest.get("canonical_order", [])
-    
-    # Validate canonical schema exists
-    missing = [col for col in canonical_order if col not in df.columns]
-    if missing:
-        raise KeyError(f"Missing required canonical columns: {missing}")
-        
-    return df[canonical_order]
+    return _normalize_columns(df, manifest, "country_records.json", "JSON")
