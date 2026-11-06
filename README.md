@@ -1,10 +1,10 @@
-# Week-10-Group-Programming-Challenge-Four-Format-Data-Recovery-and-Validation
+Week-10-Group-Programming-Challenge-Four-Format-Data-Recovery-and-Validation
 
 Four-format data recovery and validation pipeline for CSV, Excel, JSON, and
 Parquet inputs. The supplied files in `data/` are read as-is and are not
 modified by the pipeline.
 
-## Setup and run
+Setup and run
 
 Install the Python dependencies:
 
@@ -54,5 +54,3 @@ py -m jupyter nbconvert --to html --execute --inplace report.ipynb --output repo
 | Member 4 — John Christian Ballesteros | `@John-Christian-Ballesteros` | `johnchristian.ballesteros@ust.edu.ph` | Pandas analysis and NumPy matrix |
 | Member 5 — Jeremiah Daniel Padilla | `@jdpadilla2` | `jeremiahdaniel.padilla@ust.edu.ph` | CLI, pipeline integration, staging, exports, and failure tests |
 
-The two unconfirmed commit emails should be completed by those members before
-final submission.
