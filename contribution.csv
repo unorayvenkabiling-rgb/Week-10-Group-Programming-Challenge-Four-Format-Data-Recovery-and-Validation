@@ -1,8 +1,8 @@
 member_id,member_name,github_username,role,assigned_files,commits_submitted,peer_reviewed_by,pr_status
 
-1,[Member 1 Name],[member1_github],Member 1 - Tabular Ingestion Specialist,"src/csv_excel_loaders.py, tests/test_member1.py",3,Member 2,Merged
+1,[Uno Timothy Rayven Kabiling], [uno],Member 1 - Tabular Ingestion Specialist,"src/csv_excel_loaders.py, tests/test_member1.py",3,Member 2,Merged
 
-2,[Member 2 Name],[member2_github],Member 2 - Semi-Structured Ingestion Specialist,"src/json_parquet_loaders.py, tests/test_member2.py",2,Member 3,Changes Requested
+2,[Carlos Gabriel Romab], [gabroman28],Member 2 - Semi-Structured Ingestion Specialist,"src/json_parquet_loaders.py, tests/test_member2.py",2,Member 3,Changes Requested
 
 3,Isaiah Collado,IsaiahCollado,Member 3 - Validation & Quarantine Specialist,"src/validation.py, tests/test_validation.py, reviews.md",3,Member 4,Pending Review
 
