@@ -28,3 +28,12 @@ py -m unittest discover -v
 
 The required recovery and failure-category outcomes are recorded in
 `test_results.txt`.
+
+## Member ownership and Git identities
+
+| Member | Responsibility | Git identity |
+|---|---|---|
+| Member 5 — jdpadilla2 | CLI and audit integration, output staging, canonical export/reload verification, and failure-category tests | `jdpadilla2 <jeremiahdaniel.padilla@ust.edu.ph>` |
+
+Add the other members' assigned responsibilities and Git identities here for
+the complete group record.
