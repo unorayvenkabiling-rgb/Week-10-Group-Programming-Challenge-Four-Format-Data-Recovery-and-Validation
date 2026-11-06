@@ -19,3 +19,12 @@ duplicate logs; and `validation.csv` and `audit_log.csv`.
 If processing fails, the command exits nonzero, leaves any previously published
 outputs unchanged, and retains `validation_failed.csv` and
 `audit_log_failed.csv` under `.outputs.staging`.
+
+Run the automated checks with:
+
+```powershell
+py -m unittest discover -v
+```
+
+The required recovery and failure-category outcomes are recorded in
+`test_results.txt`.
