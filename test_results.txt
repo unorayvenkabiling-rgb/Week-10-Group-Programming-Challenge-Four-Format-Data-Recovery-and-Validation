@@ -3,7 +3,7 @@ Required recovery and failure-category test results
 
 Run date: 2026-11-06
 Command: py -m unittest discover -v
-Overall result: PASS (37 tests passed; 0 failures; 0 errors)
+Overall result: PASS (39 tests passed; 0 failures; 0 errors)
 
 No.  Required category                         Result  Automated check
 1    Normal four-format recovery                PASS    tests.test_pipeline.TestPipelineCLI.test_cli_generates_validated_outputs_for_configured_year
@@ -19,6 +19,6 @@ No.  Required category                         Result  Automated check
 11   Reordered records                          PASS    tests.test_export_roundtrip.TestCanonicalExportRoundTrips.test_round_trip_comparison_is_key_based_not_row_order_based
 12   Deliberately corrupted export values       PASS    tests.test_export_roundtrip.TestCanonicalExportRoundTrips.test_corrupted_export_fails_with_a_report
 
-The full suite also covers analysis, readers, output staging, export tolerance,
-missingness, and CLI failure-report retention. Temporary test fixtures are
-created outside data/ or held in memory.
+The full suite also covers analysis, CSV/Excel readers, output staging, export
+tolerance, missingness, and CLI failure-report retention. Temporary test
+fixtures are created outside data/ or held in memory.
