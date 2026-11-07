@@ -1,45 +1,35 @@
-import unittest
+import pandas as pd
 import json
 
-from src.json_parquet_loaders import load_parquet_records, load_json_records
+from .readers import _file_config, _normalize_columns
 
 
-class TestMember2Loaders(unittest.TestCase):
-    def setUp(self):
-        with open("data/manifest.json", "r") as f:
-            self.manifest = json.load(f)
+def load_parquet_records(filepath: str, manifest: dict) -> pd.DataFrame:
+    """
+    Read and map Parquet records while preserving values for validation.
+    """
+    _file_config(manifest, "country_records.parquet")
+    df = pd.read_parquet(filepath)
+    return _normalize_columns(
+        df, manifest, "country_records.parquet", "Parquet"
+    )
 
-        self.canonical_columns = self.manifest.get("canonical_order", [])
+def load_json_records(filepath: str, manifest: dict) -> pd.DataFrame:
+    """
+    Read nested JSON records, map them, and preserve values for validation.
+    """
+    file_config = _file_config(manifest, "country_records.json")
+    try:
+        with open(filepath, "r", encoding=file_config.get("encoding", "utf-8")) as file:
+            raw_data = json.load(file)
+    except json.JSONDecodeError:
+        raise ValueError(f"File {filepath} contains unparseable JSON data.")
 
-    def test_missing_file(self):
-        """Test that a missing file raises the correct FileNotFoundError."""
-        with self.assertRaises(FileNotFoundError):
-            load_parquet_records("data/does_not_exist.parquet", self.manifest)
-
-    def test_parquet_normalization_and_count(self):
-        """Test Parquet loader returns exactly 1,712 rows and maps columns correctly."""
-        df = load_parquet_records("data/country_records.parquet", self.manifest)
-        self.assertEqual(len(df), 1712)
-        self.assertEqual(list(df.columns), self.canonical_columns)
-
-    def test_json_normalization_and_count(self):
-        """Test JSON loader returns exactly 1,712 rows and maps columns correctly."""
-        df = load_json_records("data/country_records.json", self.manifest)
-        self.assertEqual(len(df), 1712)
-        self.assertEqual(list(df.columns), self.canonical_columns)
-
-    def test_missing_column_rejection(self):
-        """Test that a file missing a required canonical column raises a KeyError."""
-        bad_manifest = {"canonical_order": ["country", "continent", "year", "FAKE_COLUMN"]}
-
-        with self.assertRaises(KeyError):
-            load_parquet_records("data/country_records.parquet", bad_manifest)
-
-    def test_unparseable_json_rejection(self):
-        """Test that unparseable or corrupt JSON inputs raise a ValueError."""
-        with self.assertRaises(ValueError):
-            load_json_records("data/unsupported.txt", self.manifest)
-
-
-if __name__ == "__main__":
-    unittest.main()
+    record_path = file_config.get("record_path", "records")
+    if not isinstance(raw_data, dict):
+        raise ValueError(f"File {filepath} must contain a JSON object.")
+    records = raw_data.get(record_path, [])
+    if not isinstance(records, list):
+        raise ValueError(f"JSON field {record_path!r} in {filepath} must be a list.")
+    df = pd.json_normalize(records)
+    return _normalize_columns(df, manifest, "country_records.json", "JSON")
