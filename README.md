@@ -27,7 +27,8 @@ The pipeline loads and validates the input formats, reconciles the recovered
 records, runs the analyses and export round-trip checks, then publishes outputs
 only after all checks pass. Outputs include canonical CSV, Excel, JSON, and
 Parquet data; analysis tables; quarantine and duplicate logs; and validation
-and audit reports.
+and audit reports. Validation checks are also printed in the terminal for
+successful and failed processing runs.
 
 If processing fails, the command exits nonzero and leaves previously published
 outputs unchanged. Failure reports are retained under `.outputs.staging/`.
@@ -53,4 +54,3 @@ py -m jupyter nbconvert --to html --execute --inplace report.ipynb --output repo
 | Member 3 — Isaiah Collado | `@IsaiahCollado` | `isaiah.collado@ust.edu.ph` | Validation, quarantine, duplicates, and conflicts |
 | Member 4 — John Christian Ballesteros | `@John-Christian-Ballesteros` | `johnchristian.ballesteros@ust.edu.ph` | Pandas analysis and NumPy matrix |
 | Member 5 — Jeremiah Daniel Padilla | `@jdpadilla2` | `jeremiahdaniel.padilla@ust.edu.ph` | CLI, pipeline integration, staging, exports, and failure tests |
-

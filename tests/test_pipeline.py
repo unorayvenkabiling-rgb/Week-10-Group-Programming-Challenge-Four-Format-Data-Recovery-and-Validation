@@ -55,6 +55,9 @@ class TestPipelineCLI(unittest.TestCase):
         )
         self.assertEqual(completed.returncode, 0, completed.stderr)
         self.assertIn("1704 canonical rows", completed.stdout)
+        self.assertIn("Validation report:", completed.stdout)
+        for column in ("check", "expected", "actual", "tolerance", "pass"):
+            self.assertIn(column, completed.stdout)
 
         expected_files = {
             "canonical.csv",
@@ -156,6 +159,8 @@ class TestPipelineCLI(unittest.TestCase):
 
         self.assertEqual(completed.returncode, 1, completed.stdout)
         self.assertIn("Conflicting keys detected", completed.stderr)
+        self.assertIn("Validation report:", completed.stdout)
+        self.assertIn("processing", completed.stdout)
         self.assertEqual(
             sentinel.read_text(encoding="utf-8"),
             "keep prior successful outputs\n",

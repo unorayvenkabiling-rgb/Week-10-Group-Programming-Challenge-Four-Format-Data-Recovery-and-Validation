@@ -449,6 +449,12 @@ def _report_from_exception(
     return pd.DataFrame(failure_run.validation_rows, columns=REPORT_COLUMNS)
 
 
+def _print_validation_report(report: pd.DataFrame) -> None:
+    """Print validation checks using the same columns as the CSV report."""
+    print("Validation report:")
+    print(report.to_string(index=False))
+
+
 def run_pipeline(config_path: str | Path) -> int:
     """Run recovery, agreement, analysis, export verification, and publishing."""
     try:
@@ -695,6 +701,7 @@ def _execute_processing(run: ProcessingRun) -> int:
             stager.staging_dir / "audit_log.csv", index=False
         )
         stager.publish()
+        _print_validation_report(validation_report)
         print(
             f"Processing complete: {len(canonical_df)} canonical rows; "
             f"outputs published to {output_dir}"
@@ -705,6 +712,7 @@ def _execute_processing(run: ProcessingRun) -> int:
         print(f"Processing failed: {type(exc).__name__}: {exc}", file=sys.stderr)
         if stager is not None:
             failed_report = _report_from_exception(exc, run)
+            _print_validation_report(failed_report)
             stager.preserve_failed_report(
                 failed_report.to_csv(index=False),
                 "validation_failed.csv",
