@@ -1,57 +1,45 @@
-import pandas as pd
+import unittest
 import json
 
-def load_parquet_records(filepath: str, manifest: dict) -> pd.DataFrame:
-    """
-    Reads the Parquet file and maps its string columns to the canonical names.
-    Validates numeric values before casting.
-    """
-    # Extract mapping from the files dictionary as requested by Isaiah
-    column_mapping = manifest.get("files", {}).get("country_records.parquet", {}).get("source_to_canonical", {})
-    
-    df = pd.read_parquet(filepath)
-    df = df.rename(columns=column_mapping)
-    
-    # Strip whitespaces from object/string columns and attempt numeric casting
-    for col in df.columns:
-        if df[col].dtype == object:
-            df[col] = df[col].astype(str).str.strip()
-            
-    for num_col in ['year', 'pop', 'lifeExp', 'gdpPercap']:
-        if num_col in df.columns:
-            df[num_col] = pd.to_numeric(df[num_col], errors='ignore')
-            
-    canonical_order = manifest.get("canonical_order", [])
-    
-    # Validate canonical schema exists to prevent KeyError on indexing
-    missing = [col for col in canonical_order if col not in df.columns]
-    if missing:
-        raise KeyError(f"Missing required canonical columns: {missing}")
-        
-    return df[canonical_order]
+from src.json_parquet_loaders import load_parquet_records, load_json_records
 
-def load_json_records(filepath: str, manifest: dict) -> pd.DataFrame:
-    """
-    Reads the JSON file, extracts nested records, and maps columns to canonical names.
-    """
-    column_mapping = manifest.get("files", {}).get("country_records.json", {}).get("source_to_canonical", {})
-    
-    # Try-except block for resource cleanup and JSONDecodeError handling
-    try:
-        with open(filepath, 'r') as file:
-            raw_data = json.load(file)
-    except json.JSONDecodeError:
-        raise ValueError(f"File {filepath} contains unparseable JSON data.")
-        
-    records = raw_data.get("records", [])
-    df = pd.json_normalize(records)
-    
-    df = df.rename(columns=column_mapping)
-    canonical_order = manifest.get("canonical_order", [])
-    
-    # Validate canonical schema exists
-    missing = [col for col in canonical_order if col not in df.columns]
-    if missing:
-        raise KeyError(f"Missing required canonical columns: {missing}")
-        
-    return df[canonical_order]
+
+class TestMember2Loaders(unittest.TestCase):
+    def setUp(self):
+        with open("data/manifest.json", "r") as f:
+            self.manifest = json.load(f)
+
+        self.canonical_columns = self.manifest.get("canonical_order", [])
+
+    def test_missing_file(self):
+        """Test that a missing file raises the correct FileNotFoundError."""
+        with self.assertRaises(FileNotFoundError):
+            load_parquet_records("data/does_not_exist.parquet", self.manifest)
+
+    def test_parquet_normalization_and_count(self):
+        """Test Parquet loader returns exactly 1,712 rows and maps columns correctly."""
+        df = load_parquet_records("data/country_records.parquet", self.manifest)
+        self.assertEqual(len(df), 1712)
+        self.assertEqual(list(df.columns), self.canonical_columns)
+
+    def test_json_normalization_and_count(self):
+        """Test JSON loader returns exactly 1,712 rows and maps columns correctly."""
+        df = load_json_records("data/country_records.json", self.manifest)
+        self.assertEqual(len(df), 1712)
+        self.assertEqual(list(df.columns), self.canonical_columns)
+
+    def test_missing_column_rejection(self):
+        """Test that a file missing a required canonical column raises a KeyError."""
+        bad_manifest = {"canonical_order": ["country", "continent", "year", "FAKE_COLUMN"]}
+
+        with self.assertRaises(KeyError):
+            load_parquet_records("data/country_records.parquet", bad_manifest)
+
+    def test_unparseable_json_rejection(self):
+        """Test that unparseable or corrupt JSON inputs raise a ValueError."""
+        with self.assertRaises(ValueError):
+            load_json_records("data/unsupported.txt", self.manifest)
+
+
+if __name__ == "__main__":
+    unittest.main()
