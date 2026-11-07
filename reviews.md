@@ -1,4 +1,32 @@
 Peer Code Reviews
+Peer Review 1: Member 1 Codebase
+Reviewer: Carlos Gabriel Roman (Member 2)
+Target Author: Uno Kabiling (Member 1)
+Target Branch / PR: member-1
+Files Reviewed: src/readers.py
+Review Status: Changes Requested
+
+Code Overview
+Member 1 implemented the initial data ingestion loaders for the CSV (read_csv_file) and Excel (read_excel_file) file formats. The implementation successfully targets the correct Excel "observations" sheet and correctly handles the CSV cp1252 encoding, semicolon delimiters, and skipped comment lines.
+
+Detailed Findings & Line-by-Line Feedback
+
+src/readers.py
+Lines 8 & 16 (Missing Function Signatures & Type Hints):
+Issue: Functions lack parameters and return annotations (-> pd.DataFrame), and instead rely on a globally loaded config.json file. This violates the rubric requirement for parameterized functions.
+Recommendation: Update function signatures to accept filepath: str and manifest: dict dynamically from the main pipeline.
+
+Lines 10 & 18 (Missing Schema Normalization):
+Issue: The code returns raw DataFrames directly from pd.read_csv and pd.read_excel. It fails to map the columns to the canonical names or drop the extra CSV metadata column.
+Recommendation: Extract source_to_canonical from the manifest dictionary, use .rename(columns=...), and filter the returned DataFrame against manifest.get("canonical_order", []).
+
+Lines 12-14 & 20-22 (Anti-Pattern Exception Handling):
+Issue: Wrapping the file readers in a try-except block and returning None violates the rubric's failure handling rules. Returning None causes downstream crashes rather than safely stopping the program.
+Recommendation: Remove the try-except Exception: blocks completely. Allow FileNotFoundError to raise naturally so the pipeline halts safely on missing files.
+
+Conclusion & Next Steps
+Member 1 nailed the format-specific arguments for pandas. Once the function signatures are updated with parameters, the raw columns are mapped to the canonical schema, and the silent error catching is removed, these readers will be ready to merge into main.
+
 
 Peer Review 2: Member 2 Codebase
 Reviewer: Isaiah Collado (Member 3)
